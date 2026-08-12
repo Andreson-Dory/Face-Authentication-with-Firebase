@@ -1,6 +1,6 @@
-const CLOUD_NAME = process.env.APP_CLOUD_NAME;
-const UPLOAD_PRESET = process.env.APP_CLOUD_UPLOAD_PRESET_NAME;
-const CLOUD_API = process.env.APP_APP_COUDINARY;
+const CLOUD_NAME = process.env.EXPO_PUBLIC_CLOUD_NAME;
+const UPLOAD_PRESET = process.env.EXPO_PUBLIC_CLOUD_UPLOAD_PRESET_NAME;
+const CLOUD_API = process.env.EXPO_PUBLIC_APP_CLOUDINARY;
 
 interface CloudinaryResponse {
   secure_url: string;
