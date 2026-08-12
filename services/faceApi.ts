@@ -1,6 +1,6 @@
 import { FaceApiResult } from "@/constants/types";
 
-const FACE_API_BASE_URL = process.env.APP_FACE_API;
+const FACE_API_BASE_URL = process.env.EXPO_PUBLIC_FACE_API;
 const MOCK_MODE = true;
 
 export async function registerFace(

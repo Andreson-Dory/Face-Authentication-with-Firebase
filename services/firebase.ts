@@ -4,12 +4,12 @@ import { Firestore, getFirestore } from "firebase/firestore";
 
 // TODO: paste your config from Firebase Console > Project Settings > General
 const firebaseConfig = {
-  apiKey: process.env.APP_API_KEY_FIREBASE,
-  authDomain: process.env.APP_AUTH_DOMAIN_FIREBASE,
-  projectId: process.env.APP_PROJECT_ID_FIREBASE,
-  storageBucket: process.env.APP_STORAGE_BUCKET_FIREBASE,
-  messagingSenderId: process.env.APP_MESSAGING_SENDER_ID,
-  appId: process.env.APP_ID_FIREBASE,
+  apiKey: process.env.EXPO_PUBLIC_API_KEY_FIREBASE,
+  authDomain: process.env.EXPO_PUBLIC_AUTH_DOMAIN_FIREBASE,
+  projectId: process.env.EXPO_PUBLIC_PROJECT_ID_FIREBASE,
+  storageBucket: process.env.EXPO_PUBLIC_STORAGE_BUCKET_FIREBASE,
+  messagingSenderId: process.env.EXPO_PUBLIC_MESSAGING_SENDER_ID,
+  appId: process.env.EXPO_PUBLIC_ID_FIREBASE,
 };
 
 const app: FirebaseApp = initializeApp(firebaseConfig);
