@@ -1,8 +1,8 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FirebaseApp, initializeApp } from "firebase/app";
-import { Auth, getAuth } from "firebase/auth";
+import { Auth, getReactNativePersistence, initializeAuth } from "firebase/auth";
 import { Firestore, getFirestore } from "firebase/firestore";
 
-// TODO: paste your config from Firebase Console > Project Settings > General
 const firebaseConfig = {
   apiKey: process.env.EXPO_PUBLIC_API_KEY_FIREBASE,
   authDomain: process.env.EXPO_PUBLIC_AUTH_DOMAIN_FIREBASE,
@@ -14,9 +14,9 @@ const firebaseConfig = {
 
 const app: FirebaseApp = initializeApp(firebaseConfig);
 
-export const auth: Auth = getAuth(app);
+export const auth: Auth = initializeAuth(app, {
+  persistence: getReactNativePersistence(AsyncStorage),
+});
 export const db: Firestore = getFirestore(app);
-// NOTE: no Firebase Storage export — using Cloudinary instead (see storage.ts).
-// Firebase Storage now requires the Blaze plan to even enable, so we skip it.
 
 export default app;
