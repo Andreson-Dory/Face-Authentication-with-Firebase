@@ -1,3 +1,11 @@
+import Button from "@/components/Button";
+import CameraPreview from "@/components/CameraPreview";
+import Input from "@/components/Input";
+import { RootStackParamList } from "@/constants/types/types";
+import { useAuth } from "@/context/AuthContext";
+import { registerFlow } from "@/services/authFlows";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import {
   Alert,
@@ -8,13 +16,6 @@ import {
   Text,
   View,
 } from "react-native";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "@/constants/types";
-import { registerFlow } from "@/services/authFlows";
-import { useAuth } from "@/context/AuthContext";
-import Button from "@/components/Button";
-import Input from "@/components/Input";
-import CameraPreview from "@/components/CameraPreview";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Register">;
 
@@ -28,13 +29,18 @@ export default function RegisterScreen({ navigation }: Props) {
   const [email, setEmail] = useState("");
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState<{ name?: string; email?: string; image?: string }>({});
+  const [errors, setErrors] = useState<{
+    name?: string;
+    email?: string;
+    image?: string;
+  }>({});
 
   const validate = (): boolean => {
     const nextErrors: typeof errors = {};
     if (!name.trim()) nextErrors.name = "Le nom est requis.";
     if (!email.trim()) nextErrors.email = "L'e-mail est requis.";
-    else if (!EMAIL_REGEX.test(email.trim())) nextErrors.email = "E-mail invalide.";
+    else if (!EMAIL_REGEX.test(email.trim()))
+      nextErrors.email = "E-mail invalide.";
     if (!imageUri) nextErrors.image = "Un selfie est requis.";
 
     setErrors(nextErrors);
@@ -46,9 +52,13 @@ export default function RegisterScreen({ navigation }: Props) {
 
     setLoading(true);
     try {
-      const user = await registerFlow({ name: name.trim(), email: email.trim(), imageUri });
+      const user = await registerFlow({
+        name: name.trim(),
+        email: email.trim(),
+        imageUri,
+      });
       setUser({ ...user, createdAt: new Date().toISOString() });
-      navigation.reset({ index: 0, routes: [{ name: "Profile" }] });
+      router.replace("/profile");
     } catch (err) {
       Alert.alert(
         "Échec de l'inscription",
@@ -57,6 +67,7 @@ export default function RegisterScreen({ navigation }: Props) {
     } finally {
       setLoading(false);
     }
+    router.replace("/login");
   };
 
   return (
@@ -64,14 +75,19 @@ export default function RegisterScreen({ navigation }: Props) {
       behavior={Platform.OS === "ios" ? "padding" : undefined}
       style={styles.flex}
     >
-      <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
+      <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps="handled"
+      >
         <Text style={styles.title}>Créer un compte</Text>
         <Text style={styles.subtitle}>
           Ton visage servira à te reconnecter, pas besoin de mot de passe.
         </Text>
 
         <CameraPreview imageUri={imageUri} onCapture={setImageUri} />
-        {errors.image ? <Text style={styles.imageError}>{errors.image}</Text> : null}
+        {errors.image ? (
+          <Text style={styles.imageError}>{errors.image}</Text>
+        ) : null}
 
         <Input
           label="Nom complet"
@@ -93,8 +109,9 @@ export default function RegisterScreen({ navigation }: Props) {
 
         <View style={styles.footer}>
           <Text style={styles.footerText}>Déjà un compte ?</Text>
-          <Text style={styles.link} onPress={() => navigation.navigate("Login")}>
-            {" "}Se connecter
+          <Text style={styles.link} onPress={() => router.replace("/login")}>
+            {" "}
+            Se connecter
           </Text>
         </View>
       </ScrollView>
@@ -107,7 +124,13 @@ const styles = StyleSheet.create({
   container: { padding: 24, flexGrow: 1, justifyContent: "center" },
   title: { fontSize: 26, fontWeight: "700", color: "#111827", marginBottom: 6 },
   subtitle: { fontSize: 14, color: "#6B7280", marginBottom: 24 },
-  imageError: { color: "#DC2626", fontSize: 12, textAlign: "center", marginTop: -12, marginBottom: 12 },
+  imageError: {
+    color: "#DC2626",
+    fontSize: 12,
+    textAlign: "center",
+    marginTop: -12,
+    marginBottom: 12,
+  },
   footer: { flexDirection: "row", justifyContent: "center", marginTop: 20 },
   footerText: { color: "#6B7280" },
   link: { color: "#4F46E5", fontWeight: "600" },

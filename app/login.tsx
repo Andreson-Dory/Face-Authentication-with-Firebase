@@ -1,11 +1,12 @@
-import React, { useState } from "react";
-import { Alert, StyleSheet, Text, View } from "react-native";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "@/constants/types";
-import { faceLoginFlow } from "@/services/authFlows";
-import { useAuth } from "@/context/AuthContext";
 import Button from "@/components/Button";
 import CameraPreview from "@/components/CameraPreview";
+import { RootStackParamList } from "@/constants/types/types";
+import { useAuth } from "@/context/AuthContext";
+import { faceLoginFlow } from "@/services/authFlows";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { router } from "expo-router";
+import React, { useState } from "react";
+import { Alert, StyleSheet, Text, View } from "react-native";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Login">;
 
@@ -27,7 +28,9 @@ export default function LoginScreen({ navigation }: Props) {
     try {
       const user = await faceLoginFlow(imageUri);
       setUser(user);
-      navigation.reset({ index: 0, routes: [{ name: "Profile" }] });
+      if (user) {
+        router.replace("/profile");
+      }
     } catch (err) {
       Alert.alert(
         "Connexion impossible",
@@ -53,8 +56,9 @@ export default function LoginScreen({ navigation }: Props) {
 
       <View style={styles.footer}>
         <Text style={styles.footerText}>Pas encore de compte ?</Text>
-        <Text style={styles.link} onPress={() => navigation.navigate("Register")}>
-          {" "}S'inscrire
+        <Text style={styles.link} onPress={() => router.replace("/register")}>
+          {" "}
+          S'inscrire
         </Text>
       </View>
     </View>
@@ -62,9 +66,25 @@ export default function LoginScreen({ navigation }: Props) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff", padding: 24, justifyContent: "center" },
-  title: { fontSize: 26, fontWeight: "700", color: "#111827", marginBottom: 6, textAlign: "center" },
-  subtitle: { fontSize: 14, color: "#6B7280", marginBottom: 24, textAlign: "center" },
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    padding: 24,
+    justifyContent: "center",
+  },
+  title: {
+    fontSize: 26,
+    fontWeight: "700",
+    color: "#111827",
+    marginBottom: 6,
+    textAlign: "center",
+  },
+  subtitle: {
+    fontSize: 14,
+    color: "#6B7280",
+    marginBottom: 24,
+    textAlign: "center",
+  },
   footer: { flexDirection: "row", justifyContent: "center", marginTop: 20 },
   footerText: { color: "#6B7280" },
   link: { color: "#4F46E5", fontWeight: "600" },
