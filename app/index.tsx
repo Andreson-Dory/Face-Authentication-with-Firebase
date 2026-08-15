@@ -1,11 +1,5 @@
-import { AuthProvider } from "@/context/AuthContext";
-import AppNavigator from "@/navigation/AppNavigator";
-import React from "react";
+import { Redirect } from "expo-router";
 
-export default function App() {
-  return (
-    <AuthProvider>
-      <AppNavigator />
-    </AuthProvider>
-  );
+export default function Index() {
+  return <Redirect href="/login" />;
 }
