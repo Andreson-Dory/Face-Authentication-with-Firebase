@@ -1,10 +1,11 @@
+import Button from "@/components/Button";
+import { RootStackParamList } from "@/constants/types/types";
+import { useAuth } from "@/context/AuthContext";
+import { logout } from "@/services/authFlows";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import { Alert, Image, StyleSheet, Text, View } from "react-native";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "@/constants/types";
-import { logout } from "@/services/authFlows";
-import { useAuth } from "@/context/AuthContext";
-import Button from "@/components/Button";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Profile">;
 
@@ -17,7 +18,7 @@ export default function ProfileScreen({ navigation }: Props) {
     try {
       await logout();
       setUser(null);
-      navigation.reset({ index: 0, routes: [{ name: "Login" }] });
+      router.replace("/login");
     } catch (err) {
       Alert.alert(
         "Erreur",
@@ -33,7 +34,12 @@ export default function ProfileScreen({ navigation }: Props) {
     return (
       <View style={styles.container}>
         <Text style={styles.subtitle}>Aucun utilisateur connecté.</Text>
-        <Button title="Aller à la connexion" onPress={() => navigation.reset({ index: 0, routes: [{ name: "Login" }] })} />
+        <Button
+          title="Aller à la connexion"
+          onPress={() =>
+            navigation.reset({ index: 0, routes: [{ name: "Login" }] })
+          }
+        />
       </View>
     );
   }
@@ -56,8 +62,20 @@ export default function ProfileScreen({ navigation }: Props) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff", padding: 24, alignItems: "center", justifyContent: "center" },
-  avatar: { width: 140, height: 140, borderRadius: 70, marginBottom: 20, backgroundColor: "#F1F1F6" },
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    padding: 24,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  avatar: {
+    width: 140,
+    height: 140,
+    borderRadius: 70,
+    marginBottom: 20,
+    backgroundColor: "#F1F1F6",
+  },
   name: { fontSize: 22, fontWeight: "700", color: "#111827" },
   email: { fontSize: 15, color: "#6B7280", marginBottom: 32 },
   subtitle: { fontSize: 14, color: "#6B7280", marginBottom: 20 },
